@@ -1,6 +1,17 @@
 // how many util.js are out there?
 var fs = require('fs');
 
+function next_horde_day(day) {
+    var i = parseInt(day / 7);
+    var i2 = i + 1;
+    var i_7 = i * 7;
+    var i2_7 = i2 * 7;
+
+    var upcoming = i2_7 - day;
+    if( upcoming === 7 ) upcoming = 0;
+
+    return( upcoming );
+}
 
 // sync is okay for get/put because these are debug routines
 function get(filename) {
@@ -31,6 +42,7 @@ function findall(regex_pattern, string_) {
     return( output_list );
 }
 
+module.exports.next_horde_day = next_horde_day;
 module.exports.findall = findall;
 module.exports.get = get;
 module.exports.put = put;

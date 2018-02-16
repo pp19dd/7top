@@ -15,7 +15,7 @@ app.skeleton.start();
 app.network.start();
 
 app.network.handle("auth", function(m) {
-    app.skeleton.w("auth?");
+    app.skeleton.w("{red-fg}Auth{/red-fg}, sending password.");
     app.network.client.write(app.config.password + "\n");
     setInterval(function() {
         app.network.client.write("gettime\nlistplayers\n");
@@ -23,5 +23,6 @@ app.network.handle("auth", function(m) {
 });
 
 app.network.handle("time", function(m) {
-    app.skeleton.t(JSON.stringify(m));
+    app.skeleton.t(0, "Day " + m.day + ", " + m.hour + ":" + m.minute );
+    app.skeleton.t(1, "Next Horde Day: " + app.util.next_horde_day(m.day) );
 });

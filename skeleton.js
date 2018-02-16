@@ -9,18 +9,24 @@ var box_s;
 
 function start() {
     screen = blessed.screen({
-        smartCSR: true
+        //smartCSR: true,
+        fastCSR: true,
+        fullUnicode: true,
     });
     screen.title = '7top';
 
     // Create a box perfectly centered horizontally and vertically.
     log = blessed.log({
+        style: { fg: 'cyan' },
+        parent: screen,
         top: 'top',
         width: '65%',
         height: '100%-1',
     });
 
     players = blessed.box({
+        parent: screen,
+        label: 'players',
         top: '30%',
         left: '65%',
         width: '35%',
@@ -30,6 +36,9 @@ function start() {
     });
 
     box_s = blessed.box({
+        parent: screen,
+        style: { fg: 'blue', bold: true },
+        label: 'server',
         top: 'top',
         left: '65%',
         width: '35%',
@@ -58,11 +67,13 @@ function start() {
 
 function w(text) {
     log.pushLine(text);
+    //log.setContent(text.toString());
     screen.render();
 }
 
-function t(text) {
-    box_s.pushLine(text);
+function t(line, text) {
+    // box_s.pushLine(text);
+    box_s.setLine(line, text);
     screen.render();
 }
 
