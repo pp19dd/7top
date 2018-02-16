@@ -13,3 +13,15 @@ for( var k in app ) {
 
 app.skeleton.start();
 app.network.start();
+
+app.network.handle("auth", function(m) {
+    app.skeleton.w("auth?");
+    app.network.client.write(app.config.password + "\n");
+    setInterval(function() {
+        app.network.client.write("gettime\nlistplayers\n");
+    }, app.config.frequency);
+});
+
+app.network.handle("time", function(m) {
+    app.skeleton.t(JSON.stringify(m));
+});

@@ -2,13 +2,18 @@
 var app = this;
 
 var parse = [
-    [/Please enter password:/, function(matched, chunk) {
+    [/Please enter password:/, function(m, chunk) {
         return({ type: 'auth' });
-        // log.pushLine("Sending password ("  + config.password.length + ") chars" );
-        // client.write(config.password + "\n");
-        // screen.render();
     }],
-    [/Total of (.?) in the game/, function(matched, chunk) {
+    [/Day ([0-9]+), ([0-9]+):([0-9]+)/, function(m, chunk) {
+        return({
+            type: 'time',
+            day: parseInt(m[1]),
+            hour: parseInt(m[2]),
+            minute: parseInt(m[3])
+        });
+    }],
+    [/Total of (.?) in the game/, function(m, chunk) {
         var roster = [];
         var p = chunk.split("\r\n");
 

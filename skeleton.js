@@ -61,5 +61,11 @@ function w(text) {
     screen.render();
 }
 
-module.exports.w  = w;
+function t(text) {
+    box_s.pushLine(text);
+    screen.render();
+}
+
+module.exports.t = t;
+module.exports.w = w;
 module.exports.start  = start;

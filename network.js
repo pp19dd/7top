@@ -2,13 +2,25 @@ var net = require('net');
 var client = new net.Socket();
 var app;
 
+var __handlers = {};
+
+function handle(h_type, h_function) {
+    __handlers[h_type] = h_function;
+}
+
 client.on('data', function(data) {
     app.skeleton.w(
         "RECV " + data.toString().length + ": " +
         JSON.stringify(data.toString())
     );
-    //screen.render();
-    //parse_all(data.toString());
+    var msgs = app.parser.parse_all(data.toString());
+    for( var i = 0; i < msgs.length; i++ ) {
+        var l_type = msgs[i].type;
+        
+        if( typeof __handlers[l_type] != "undefined") {
+            __handlers[l_type](msgs[i]);
+        }
+    }
 });
 
 client.on('close', function() {
@@ -21,19 +33,11 @@ function start() {
     var rs = app.config.hostname + ":" + app.config.port.toString();
     app.skeleton.w("Connecting to " + rs  + " ...");
     app.skeleton.w(app);
-    //var that = this;
-
-    //this.app.skeleton.w();
-
     client.connect( this.app.config.port, this.app.config.hostname, function() {
         app.skeleton.w( "... connected" );
     });
-//         that.app.skeleton.w("Connected to " + rs);
-//         //log.pushLine("Connected to " + this.app.config.hostname + ":" + this.app.config.port);
-//         // setInterval(do_status, this.app.config.frequency);
-//         //screen.render();
-//     });
-
 }
 
 module.exports.start = start;
+module.exports.handle = handle;
+module.exports.client = client;
